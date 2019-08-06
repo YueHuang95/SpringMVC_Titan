@@ -11,7 +11,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     private RestaurantDAO restaurantDAO;
     @Override
-    @Transactional
     public void saveRestaurant(Item restaurant) {
         restaurantDAO.saveRestaurant(restaurant);
     }

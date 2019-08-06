@@ -39,9 +39,10 @@ public class RESTController {
                 if (restaurant.getCatergories() != null) {
                     // 遍历每个种类，如果在种类表里没有的先加入种类表，再保存餐厅，这样hibernate会在保存餐厅的同时保存信息进关联表
                     for (Category category : restaurant.getCatergories()) {
-                        if (!categoryService.exist(category.getName())) {
-                            categoryService.saveCategory(category.getName());
-                        }
+//                        if (!categoryService.exist(category.getName())) {
+//                            categoryService.saveCategory(category.getName());
+//                        }
+                        categoryService.saveCategory(category.getName());
                     }
                 }
                 restaurantService.saveRestaurant(restaurant);

@@ -17,6 +17,7 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(
             name="category_id",
             joinColumns=@JoinColumn(name="category_id"),

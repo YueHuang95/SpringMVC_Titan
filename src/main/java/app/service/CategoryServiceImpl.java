@@ -10,13 +10,11 @@ public class CategoryServiceImpl implements  CategoryService {
     @Autowired
     private CategoryDAO categoryDAO;
     @Override
-    @Transactional
     public boolean exist(String categoryName) {
         return categoryDAO.exist(categoryName);
     }
 
     @Override
-    @Transactional
     public void saveCategory(String name) {
         categoryDAO.saveCategory(name);
     }

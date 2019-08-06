@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class CategoryDAOImpl implements  CategoryDAO{
     @Autowired
     private SessionFactory sessionFactory;
     @Override
+    @Transactional
     public boolean exist(String categoryName) {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<Category> query = currentSession.createQuery("from Category c where c.name=:name", Category.class);
@@ -26,6 +28,7 @@ public class CategoryDAOImpl implements  CategoryDAO{
     }
 
     @Override
+    @Transactional
     public void saveCategory(String name) {
         Session currentSession = sessionFactory.getCurrentSession();
         Category category = new Category(name);
