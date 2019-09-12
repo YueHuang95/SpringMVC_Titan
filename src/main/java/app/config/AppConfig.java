@@ -1,20 +1,20 @@
 package app.config;
 
-        import com.mchange.v2.c3p0.ComboPooledDataSource;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.context.annotation.*;
-        import org.springframework.core.env.Environment;
-        import org.springframework.orm.hibernate5.HibernateTransactionManager;
-        import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-        import org.springframework.transaction.annotation.EnableTransactionManagement;
-        import org.springframework.web.servlet.ViewResolver;
-        import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-        import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-        import javax.sql.DataSource;
-        import java.beans.PropertyVetoException;
-        import java.util.Properties;
-        import java.util.logging.Logger;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
+import java.util.logging.Logger;
 
 @Configuration
 @EnableWebMvc
@@ -22,6 +22,7 @@ package app.config;
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"app"})
+@MapperScan("app.dao")
 public class AppConfig {
     @Autowired
     private Environment env;
@@ -81,30 +82,17 @@ public class AppConfig {
 
         return intPropVal;
     }
-
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("app.entity");
-        sessionFactory.setHibernateProperties(hibernateProperties());
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        // 设置MyBatis 配置文件的路径
+        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("SqlMapConfig.xml"));
+        // 设置数据源
+        sqlSessionFactoryBean.setDataSource(dataSource());
+        SqlSessionFactory sessionFactory = sqlSessionFactoryBean.getObject();
         return sessionFactory;
-    }
-
-    private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        // 相比于getProperty, getRequiredProperty遇到不存在的key会抛出异常
-        properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
-        properties.put("hibernate.format_sql", env.getRequiredProperty("hibernate.format_sql"));
-        return properties;
 
     }
-    @Bean
-    public HibernateTransactionManager getTransactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
-    }
+
 }
 

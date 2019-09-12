@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface YelpAPIService {
-    public  List<Item> search(double lat, double lon, String term) throws IOException;
+    List<Item> search(double lat, double lon, String term) throws IOException;
 }

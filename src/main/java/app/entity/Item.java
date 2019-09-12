@@ -1,41 +1,26 @@
 package app.entity;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name="items")
-public class Item {
-    @Id
-    @Column(name="item_id")
+import java.io.Serializable;
+import java.util.List;
+
+public class Item implements Serializable {
+
     private String itemId;
 
-    @Column(name="name")
     private String name;
 
-    @Column(name="rating")
     private double rating;
 
-    @Column(name="address")
     private String address;
 
-    @Column(name="url")
     private String url;
 
-    @Column(name="image_url")
     private String imageUrl;
 
-    @Column(name="distance")
     private double distance;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JoinTable(name = "item_category_relation", joinColumns =
-                @JoinColumn(name = "item_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    @ElementCollection(targetClass=Category.class)
-    private List<Category> catergories;
+    private List<Category> categories;
 
     public Item(){}
     public Item(String itemId, String name) {
@@ -99,19 +84,19 @@ public class Item {
         this.distance = distance;
     }
 
-    public List<Category> getCatergories() {
-        return catergories;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setCatergories(List<Category> catergories) {
-        this.catergories = catergories;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
-    public void addCategory(Category category) {
-        if (this.catergories == null) {
-            this.catergories = new ArrayList<>();
-        }
-        this.catergories.add(category);
-    }
+//    public void addCategory(Category category) {
+//        if (this.categories == null) {
+//            this.categories = new ArrayList<>();
+//        }
+//        this.categories.add(category);
+//    }
 
     @Override
     public String toString() {
@@ -123,7 +108,7 @@ public class Item {
                 ", url='" + url + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", distance=" + distance +
-                ", catergories=" + catergories +
+                ", categories=" + categories +
                 '}';
     }
 }

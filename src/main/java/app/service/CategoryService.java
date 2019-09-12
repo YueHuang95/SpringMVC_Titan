@@ -1,12 +1,27 @@
 package app.service;
 
+import app.entity.Category;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
 public interface CategoryService {
-    /*
-        判断某个种类名是否存在于数据库中
+    /**
+     * 根据id进行查找
+     * @param id
+     * @return
      */
-    boolean exist(String categoryName);
-    /*
-        保存种类到数据库，传入种类名参数
-     */
-    void saveCategory(String name);
+    Category findById(Integer id);
+
+    void saveCategory(Category category);
+
+    List<Category> findByName(String name);
+
+    List<Category> unionSelect(String itemId);
+
+    List<Category> findAll();
+
+    void saveRelationTable(Integer category_id, String item_id) ;
 }

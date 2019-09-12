@@ -341,7 +341,7 @@
      *            The item data (JSON object)
      */
     function addItem(itemList, item) {
-        var item_id = item.item_id;
+        var item_id = item.itemId;
 
         // create the <li> tag and specify the id and class attributes
         var li = $('li', {
@@ -354,9 +354,9 @@
         li.dataset.favorite = item.favorite;
 
         // item image
-        if (item.image_url) {
+        if (item.imageUrl) {
             li.appendChild($('img', {
-                src: item.image_url
+                src: item.imageUrl
             }));
         } else {
             li.appendChild($(
@@ -380,10 +380,18 @@
         var category = $('p', {
             className: 'item-category'
         });
-        category.innerHTML = 'Category: ' + item.categories.join(', ');
+        var cat = '';
+        item.categories.forEach(function(item1, index) {
+            if (index == 0) {
+                cat = cat + item1.name;
+            } else {
+                cat = cat + ',' + item1.name;
+            }
+        });
+
+        category.innerHTML = ('Category: ' + cat);
         section.appendChild(category);
 
-        // TODO(vincent). here we might have a problem showing 3.5 as 3.
         // stars
         var stars = $('div', {
             className: 'stars'
