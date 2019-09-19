@@ -1,7 +1,9 @@
 package app.service;
 
+import app.dao.Item_Category_RelationDAO;
 import app.entity.Category;
 import app.entity.Item;
+import app.entity.Item_Category_Relation;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
@@ -35,6 +37,10 @@ public class YelpAPIServiceImpl implements YelpAPIService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private Item_Category_RelationDAO item_category_relationDAO;
+
     public YelpAPIServiceImpl() {
         this.logger = Logger.getLogger(getClass());
     }
@@ -153,6 +159,12 @@ public class YelpAPIServiceImpl implements YelpAPIService {
             return;
         }
         JSONArray categories = restaurant.getJSONArray("categories");
+        // 拿出关联表中有关当前餐厅id的信息，把拿出来的数据的种类id全部放入一个集合，方便关联表的存储判断
+        List<Item_Category_Relation> list = item_category_relationDAO.findByItemId(restaurantId);
+        List<Integer> categoryidList = new ArrayList<>();
+        for (Item_Category_Relation obj : list) {
+            categoryidList.add(obj.getCategory_id());
+        }
         // 遍历整个数组并且把每个种类都新建一个种类实体类然后存入数据库，再把每个种类和餐厅的关联信息存入关联表
         List<Category> categoryList = new ArrayList<>();
         for(int i = 0; i < categories.size(); i++) {
@@ -166,11 +178,9 @@ public class YelpAPIServiceImpl implements YelpAPIService {
                 } else {
                     cat.setCategory_id(categoryService.findByName("%" + cat.getName() + "%").get(0).getCategory_id());
                 }
-                // 把种类和餐厅的关联信息存入关联表
-                try {
+                // 把种类和餐厅的关联信息存入关联表,种类id集合如果已经存在该种类id表明关联表中已有此餐厅+种类的关联信息了
+                if (!categoryidList.contains(cat.getCategory_id())) {
                     categoryService.saveRelationTable(cat.getCategory_id(), restaurantId);
-                } catch (DataAccessException e) {
-                    logger.error("JDBC错误: " + e);
                 }
                 categoryList.add(cat);
             }

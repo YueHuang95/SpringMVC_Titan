@@ -28,6 +28,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public List<Item> getItemByIds(List<String> itemIds) {
+        return  restaurantDAO.getItemByIds(itemIds);
+    }
+
+    @Override
     public List<Item> getItems() {
         return restaurantDAO.getItems();
     }

@@ -6,7 +6,7 @@
     <settings>
         <setting name="logImpl" value="LOG4J"/>
     </settings>
-<!--  配置环境  -->
+
 <!--    <environments default="mysql">-->
 <!--        &lt;!&ndash;        配置mysql环境&ndash;&gt;-->
 <!--        <environment id="mysql">-->

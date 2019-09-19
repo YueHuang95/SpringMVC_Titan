@@ -22,6 +22,7 @@ public class Item implements Serializable {
 
     private List<Category> categories;
 
+    private boolean favorite;
     public Item(){}
     public Item(String itemId, String name) {
         this.itemId = itemId;
@@ -97,6 +98,14 @@ public class Item implements Serializable {
 //        }
 //        this.categories.add(category);
 //    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 
     @Override
     public String toString() {

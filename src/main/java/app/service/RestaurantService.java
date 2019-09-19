@@ -29,4 +29,5 @@ public interface RestaurantService {
      * @return
      */
     List<Item> unionSelect(Integer categoryId);
+    List<Item> getItemByIds(List<String> itemIds);
 }

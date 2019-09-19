@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Category implements Serializable {
+
     private int category_id;
 
     private String name;
