@@ -5,8 +5,8 @@
      */
     var user_id = '1111';
     var user_fullname = 'John';
-    var lng = -122.08;
-    var lat = 37.38;
+    var lng = -117.16;
+    var lat = 32.71;
 
     /**
      * Initialize
@@ -298,7 +298,19 @@
             favorite: [item_id]
         });
         var method = favorite ? 'POST' : 'DELETE';
-
+        // $.ajax({
+        //     async: true,    //表示请求是否异步处理
+        //     type: "post",    //请求类型
+        //     url: "http://localhost:8080/SpringMVCTitan_war_exploded/history",//请求的 URL地址
+        //     dataType: "json",//返回的数据类型
+        //     data:JSON.stringify({itemId:"sanmao",favorites:"sanmaoword"}),
+        //     success: function (data) {
+        //         console.log(data);
+        //     },
+        //     error: function (data) {
+        //         alert(data.result);
+        //     }
+        // })
         ajax(method, url, req,
             // successful callback
             function(res) {
