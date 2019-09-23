@@ -7,20 +7,20 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
 
-<!--    <environments default="mysql">-->
-<!--        &lt;!&ndash;        配置mysql环境&ndash;&gt;-->
-<!--        <environment id="mysql">-->
-<!--            &lt;!&ndash;            配置事务&ndash;&gt;-->
-<!--            <transactionManager type="JDBC"></transactionManager>-->
-<!--            &lt;!&ndash;            配置连接池&ndash;&gt;-->
-<!--            <dataSource type="POOLED">-->
-<!--                <property name="driver" value="com.mysql.jdbc.Driver"/>-->
-<!--                <property name="url" value="jdbc:mysql://localhost:3306/titan?useSSL=false"/>-->
-<!--                <property name="username" value="titan"/>-->
-<!--                <property name="password" value="123456"/>-->
-<!--            </dataSource>-->
-<!--        </environment>-->
-<!--    </environments>-->
+    <environments default="mysql">
+        <!--        配置mysql环境-->
+        <environment id="mysql">
+            <!--            配置事务-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--            配置连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/titan?useSSL=false"/>
+                <property name="username" value="titan"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
     <mappers>
         <package name="app.dao"/>
     </mappers>

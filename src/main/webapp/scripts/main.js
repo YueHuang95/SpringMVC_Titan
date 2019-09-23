@@ -318,8 +318,16 @@
                 if (result.result === 'SUCCESS') {
                     li.dataset.favorite = favorite;
                     favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
+                    subHeight(li);
                 }
             });
+    }
+    function subHeight(item) {
+        var self = this
+        var itemHeight = parseInt(item.offsetHeight)
+        if (itemHeight >= 0) {
+            itemHeight = itemHeight - 1;
+        }
     }
 
     // -------------------------------------
