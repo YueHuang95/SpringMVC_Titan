@@ -36,10 +36,11 @@ public class main {
     private Item_Category_RelationDAO item_category_relationDAO;
     @Test
     public void testMybatis() {
-
-        List<Item_Category_Relation> list = item_category_relationDAO.findByCategoryId(10);
-        System.out.println(list);
-
+        String[] array = "httlkapsodiw;lek;qlkasd".split(",");
+        for (String s : array) {
+            System.out.println(s);
+        }
+        System.out.println(array.toString());
 
     }
     @BeforeEach

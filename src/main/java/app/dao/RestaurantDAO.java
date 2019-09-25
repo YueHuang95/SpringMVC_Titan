@@ -40,7 +40,7 @@ public interface RestaurantDAO {
     @Results(value = {
             @Result(id = true, column = "item_id", property = "itemId"),
             @Result(column = "image_url", property = "imageUrl"),
-            @Result(property = "categories", column = "itemId", javaType = List.class,
+            @Result(property = "categories", column = "item_id", javaType = List.class,
                     many = @Many(select = "app.dao.CategoryDAO.unionSelect", fetchType = FetchType.LAZY))
     })
     Item getItemById(String itemId);

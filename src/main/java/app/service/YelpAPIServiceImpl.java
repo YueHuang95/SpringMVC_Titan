@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,8 @@ public class YelpAPIServiceImpl implements YelpAPIService {
 
     private final String HOST = "https://api.yelp.com";
     private final String ENDPOINT = "/v3/businesses/search";
-    private final String DEFAULT_TERM = "";  //keyword to do specific search
-    private final int SEARCH_LIMIT = 20;  // at most how many restaurants to be displayed
+    private final String DEFAULT_TERM = "food";  //keyword to do specific search
+    private final int SEARCH_LIMIT = 30;  // at most how many restaurants to be displayed
     //On yelp.com, it says we need to set Authorization HTTP header value as Bearer + API_KEY
     private final String TOKEN_TYPE = "Bearer";
     //We need to add authorized key in header of the request to Yelp
@@ -51,11 +52,20 @@ public class YelpAPIServiceImpl implements YelpAPIService {
      * @param term 特殊搜索字符
      * @return
      */
+
     @Override
     public List<Item> search(double lat, double lon, String term) {
+        return search(lat, lon, term, SEARCH_LIMIT);
+    }
+
+    @Override
+    public List<Item> search(double lat, double lon, String term, int limit) {
         //if we didnt specify search keyword then just  use default one
         if (term == null || term.isEmpty()) {
             term = DEFAULT_TERM;
+        }
+        if (limit > 50) {
+            limit = 50;
         }
         try {
             //Space -> "+" and all characters other than digits, alphabet, ".""-""*""_""-"
@@ -66,7 +76,7 @@ public class YelpAPIServiceImpl implements YelpAPIService {
             e.printStackTrace();
         }
         // 拼接整个URL String.format()就相当于C语言里的printf()
-        String query = String.format("term=%s&latitude=%s&longitude=%s&limit=%s", term, lat, lon, SEARCH_LIMIT);
+        String query = String.format("term=%s&latitude=%s&longitude=%s&limit=%s", term, lat, lon, limit);
         String url = HOST + ENDPOINT + "?" + query;
 
         // 新建一个HTTP连接
@@ -75,6 +85,7 @@ public class YelpAPIServiceImpl implements YelpAPIService {
             System.out.println("URL:" + new URL(url).getFile());
             connection.setRequestMethod("GET"); //设置请求类型
             connection.setRequestProperty("Authorization", TOKEN_TYPE + " " + API_KEY); // 设置请求头信息
+            connection.setRequestProperty("Charset", "utf-8");
             connection.connect();
             int responseCode = connection.getResponseCode();
             System.out.println("response code is : " + responseCode);
@@ -83,7 +94,7 @@ public class YelpAPIServiceImpl implements YelpAPIService {
                 return new ArrayList<>();
             }
             // 缓存读取器 比其他的高效因为减少了IO次数 8k默认值先读进来不用一次次开启再读取再转换
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
             String inputLine = "";
             StringBuilder result = new StringBuilder();
             while ((inputLine = bufferedReader.readLine()) != null) {

@@ -33,8 +33,10 @@ public class RecommendationServiceImpl implements RecommendationService {
         for (Favorite fav : favoriteList) {
             Item item = restaurantDAO.getItemById(fav.getItem_id());
             visitedItems.add(item);
-            for (Category category : item.getCategories()) {
-                categoryMap.put(category.getName(), categoryMap.getOrDefault(category.getName(), 0) + 1);
+            if (item.getCategories() != null) {
+                for (Category category : item.getCategories()) {
+                    categoryMap.put(category.getName(), categoryMap.getOrDefault(category.getName(), 0) + 1);
+                }
             }
         }
         List<Map.Entry<String, Integer>> categoryList = new ArrayList<>(categoryMap.entrySet());
@@ -44,7 +46,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         // 根据每个种类名来调用Yelp搜索餐厅，遍历每个餐厅来加入到最终的集合，如果是已经喜好过的或者搜索到的就过滤掉
         for (Map.Entry<String, Integer> entry : categoryList) {
             try {
-                List<Item> items = yelpAPIService.search(lat, lon, entry.getKey());
+                List<Item> items = yelpAPIService.search(lat, lon, entry.getKey(), 100);
                 List<Item> filteredItems = new ArrayList<>();
                 for (Item item : items) {
                     if (!visitedItems.contains(item)) {
